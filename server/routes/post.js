@@ -25,9 +25,9 @@ router.post("/add", postValidator, isAuth, async (req, res) => {
         res.json({
             success: true,
             message: "Postagem criada!",
-            comment
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: "Erro interno",

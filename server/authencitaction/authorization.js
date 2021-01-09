@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 module.exports = {
     isAuth: function (req, res, next) {
@@ -9,15 +10,23 @@ module.exports = {
             if (token.startsWith(checkBearer)) {
                 token = token.slice(checkBearer.length, token.length);
             }
-            jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            jwt.verify(token, process.env.SECRET, async (err, decoded) => {
                 if (err) {
                     res.status(403).json({
                         success: false,
                         message: "Failed to authenticate",
                     });
                 } else {
-                    req.decoded = decoded;
-                    next();
+                    let user = await User.findOne({ _id: decoded._id });
+                    if (user) {
+                        req.decoded = decoded;
+                        next();
+                    } else {
+                        res.status(403).json({
+                            success: false,
+                            message: "Failed to authenticate",
+                        });
+                    }
                 }
             });
         } else {

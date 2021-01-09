@@ -34,7 +34,10 @@
                         Entrar <i class="fa fa-sign-in" aria-hidden="true"></i>
                     </button>
                 </div>
-            <p>Ainda não é cadastrado? Crie uma conta <NuxtLink class="redirect" to="/register">aqui</NuxtLink></p>
+                <p>
+                    Ainda não é cadastrado? Crie uma conta
+                    <NuxtLink class="redirect" to="/register">aqui</NuxtLink>
+                </p>
             </form>
         </div>
     </div>
@@ -42,8 +45,7 @@
 
 <script>
 export default {
-    middleware: "auth",
-    auth: "guest",
+    middleware: "redirectIfUser",
     data() {
         return {
             email: "",
@@ -52,22 +54,20 @@ export default {
     },
     methods: {
         async onLogin() {
-            try {
-                await this.$auth.loginWith("local", {
-                    data: {
-                        email: this.email,
-                        password: this.password,
-                    },
+            this.$store
+                .dispatch("login", {
+                    email: this.email,
+                    password: this.password,
                 })
-            } catch (err) {
-                this.$bvToast.toast(err.response.data.message, {
-                    title: "Erro",
-                    autoHideDelay: 5000,
-                    variant: "danger",
-                    toaster: "b-toaster-top-center",
-                    solid: true
+                .catch((err) => {
+                    this.$bvToast.toast(err, {
+                        title: "Erro",
+                        autoHideDelay: 3000,
+                        variant: "danger",
+                        toaster: "b-toaster-top-center",
+                        solid: true,
+                    });
                 });
-            }
         },
     },
 };

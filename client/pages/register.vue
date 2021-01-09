@@ -52,17 +52,18 @@
                         Criar uma Conta
                     </button>
                 </div>
-                <p>Já possui uma conta? Entre <NuxtLink class="redirect" to="/login">aqui</NuxtLink></p>
+                <p>
+                    Já possui uma conta? Entre
+                    <NuxtLink class="redirect" to="/login">aqui</NuxtLink>
+                </p>
             </form>
         </div>
     </div>
 </template>
 
 <script>
-
 export default {
-    middleware: "auth",
-    auth: "guest",
+    middleware: "redirectIfUser",
     data() {
         return {
             name: "",
@@ -81,27 +82,33 @@ export default {
                     checkpassword: this.checkpassword,
                 };
 
-                let response = await this.$axios.$post(
+                let responseR = await this.$axios.$post(
                     "http://localhost:8080/user/register",
                     data
                 );
-                if (response.success) {
-                    this.$auth.loginWith("local", {
-                        data: {
+                if (responseR.success) {
+                    this.$store
+                        .dispatch("login", {
                             email: this.email,
                             password: this.password,
-                        },
-                    });
-
-                    this.$router.push("/");
+                        })
+                        .catch((err) => {
+                            this.$bvToast.toast(err, {
+                                title: "Erro",
+                                autoHideDelay: 3000,
+                                variant: "danger",
+                                toaster: "b-toaster-top-center",
+                                solid: true,
+                            });
+                        });
                 }
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
                     autoHideDelay: 5000,
                     variant: "danger",
-                    toaster: 'b-toaster-top-center',
-                    solid: true
+                    toaster: "b-toaster-top-center",
+                    solid: true,
                 });
             }
         },

@@ -24,13 +24,13 @@
                     >LEIA MAIS</NuxtLink
                 >
                 <NuxtLink
-                    v-if="$auth.$state.user && $auth.$state.user.isAdmin"
+                    v-if="$store.state.user.isAdmin"
                     :to="`/post/update/${post.slug}`"
                     class="operation"
                     ><i class="fa fa-refresh" aria-hidden="true"></i>
                 </NuxtLink>
                 <a
-                    v-if="$auth.$state.user && $auth.$state.user.isAdmin"
+                    v-if="$store.state.user.isAdmin"
                     href="#"
                     class="operation"
                     @click.prevent="onDeletePost(post._id, index)"
@@ -155,6 +155,7 @@ export default {
     display: block;
     margin: 0 auto;
     color: red;
+    width: 10px;
 }
 
 .button-index {

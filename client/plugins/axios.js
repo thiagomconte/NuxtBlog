@@ -1,8 +1,8 @@
-export default function ({ $axios, redirect }) {
-    $axios.onError(error => {
-      if(error.response.status === 403) {
-        this.$auth.logout();
-        redirect('/login')
-      }
-    })
-  }
+export default function({ $axios, store }) {
+  $axios.onError(error => {
+    const code = parseInt(error.response && error.response.status);
+    if (code === 403) {
+      store.dispatch('logout')
+    }
+  });
+}

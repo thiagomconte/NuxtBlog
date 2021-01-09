@@ -28,13 +28,13 @@
                     >LEIA MAIS</NuxtLink
                 >
                 <NuxtLink
-                    v-if="$auth.$state.user && $auth.$state.user.isAdmin"
+                    v-if="$store.state.user.isAdmin"
                     :to="`/post/update/${post.slug}`"
                     class="operation"
                     ><i class="fa fa-refresh" aria-hidden="true"></i>
                 </NuxtLink>
                 <a
-                    v-if="$auth.$state.user && $auth.$state.user.isAdmin"
+                    v-if="$store.state.user.isAdmin"
                     href="#"
                     class="operation"
                     @click.prevent="onDeletePost(post._id, index)"
@@ -89,31 +89,31 @@ export default {
         linkGen(pageNum) {
             return `/${pageNum}`;
         },
-    },
-    async onDeletePost(id, index) {
-        try {
-            let response = await this.$axios.$delete(
-                `http://localhost:8080/post/delete/${id}`
-            );
-            if (response.success) {
-                this.posts.splice(index, 1);
+        async onDeletePost(id, index) {
+            try {
+                let response = await this.$axios.$delete(
+                    `http://localhost:8080/post/delete/${id}`
+                );
+                if (response.success) {
+                    this.posts.splice(index, 1);
+                }
+                this.$bvToast.toast("Postagem removida", {
+                    title: "Sucesso",
+                    autoHideDelay: 5000,
+                    variant: "success",
+                    toaster: "b-toaster-top-center",
+                    solid: true,
+                });
+            } catch (err) {
+                this.$bvToast.toast(err.response.data.message, {
+                    title: "Erro",
+                    autoHideDelay: 5000,
+                    variant: "danger",
+                    toaster: "b-toaster-top-center",
+                    solid: true,
+                });
             }
-            this.$bvToast.toast("Postagem removida", {
-                title: "Sucesso",
-                autoHideDelay: 5000,
-                variant: "success",
-                toaster: "b-toaster-top-center",
-                solid: true,
-            });
-        } catch (err) {
-            this.$bvToast.toast(err.response.data.message, {
-                title: "Erro",
-                autoHideDelay: 5000,
-                variant: "danger",
-                toaster: "b-toaster-top-center",
-                solid: true,
-            });
-        }
+        },
     },
 };
 </script>
@@ -133,6 +133,14 @@ export default {
     margin-top: 20px;
     width: 100%;
     max-width: 270px;
+}
+
+.operation {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    color: red;
+    width: 10px;
 }
 
 .h3-index {

@@ -14,9 +14,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [
-    '~/plugins/axios',
-  ],
+  plugins: ["~/plugins/axios"],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -32,32 +30,12 @@ export default {
     "@nuxtjs/axios",
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
-    "@nuxtjs/auth-next"
+    "cookie-universal-nuxt"
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
-
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {
-            url: "http://localhost:8080/user/login",
-            method: "post",
-            propertyName: "token"
-          },
-          user: {
-            url: "http://localhost:8080/user/profile",
-            method: "get",
-            propertyName: "user"
-          },
-          logout: true
-        }
-      },
-    }
-  }
+  build: {}
 };

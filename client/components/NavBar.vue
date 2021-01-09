@@ -14,7 +14,7 @@
                         <span>Home</span>
                     </NuxtLink>
                     <NuxtLink
-                        v-if="!$auth.$state.loggedIn"
+                        v-if="!$store.state.isAuthenticated"
                         class="nav-link"
                         to="/login"
                     >
@@ -22,7 +22,7 @@
                         Login
                     </NuxtLink>
                     <NuxtLink
-                        v-if="!$auth.$state.loggedIn"
+                        v-if="!$store.state.isAuthenticated"
                         class="nav-link"
                         to="/register"
                     >
@@ -30,7 +30,7 @@
                         Registrar
                     </NuxtLink>
                     <NuxtLink
-                        v-if="$auth.$state.user && $auth.$state.user.isAdmin"
+                        v-if="$store.state.user.isAdmin"
                         class="nav-link"
                         to="/post/create"
                     >
@@ -39,7 +39,7 @@
                     </NuxtLink>
                     <a
                         @click="onLogout"
-                        v-if="$auth.$state.loggedIn"
+                        v-if="$store.state.isAuthenticated"
                         class="nav-link"
                         href="#"
                     >
@@ -53,18 +53,16 @@
                     <NuxtLink
                         class="nav-link mr-2"
                         to="/profile"
-                        v-if="$auth.$state.loggedIn"
+                        v-if="$store.state.isAuthenticated"
                     >
-                        Olá, {{ $auth.$state.user.name }}
+                        Olá, {{ $store.state.user.name}}
                     </NuxtLink>
                     <b-nav-form>
                         <b-form-input
-                            size="sm"
                             class="mr-sm-2"
                             placeholder="Search"
                         ></b-form-input>
                         <b-button
-                            size="sm"
                             variant="danger"
                             class="my-2 my-sm-0"
                             placeholder="Buscar postagem"
@@ -82,7 +80,7 @@
 export default {
     methods: {
         async onLogout() {
-            await this.$auth.logout();
+            this.$store.dispatch('logout')
         },
     },
 };

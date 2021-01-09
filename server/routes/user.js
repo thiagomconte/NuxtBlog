@@ -21,12 +21,12 @@ router.post("/register", validateNewUser, async (req, res) => {
             if (obj.keyPattern.email) {
                 res.status(400).json({
                     success: false,
-                    message: "E-mail already exists",
+                    message: "Este e-mail já se encontra em uso",
                 });
             } else {
                 res.status(500).json({
                     success: false,
-                    message: "Try again later",
+                    message: "Tente novamente mais tarde",
                 });
             }
         } else {
@@ -36,7 +36,7 @@ router.post("/register", validateNewUser, async (req, res) => {
             res.json({
                 success: true,
                 token: token,
-                message: "Successfully created",
+                message: "Sua conta foi criada com sucesso",
             });
         }
     });
@@ -47,7 +47,7 @@ router.post("/login", async (req, res) => {
     try {
         let user = await User.findOne({ email: req.body.email });
         if (!user) {
-            res.status(403).json({
+            res.status(400).json({
                 success: false,
                 message: "Credenciais incorretas",
             });
@@ -61,14 +61,14 @@ router.post("/login", async (req, res) => {
                     token: token,
                 });
             } else {
-                res.status(403).json({
+                res.status(400).json({
                     success: false,
                     message: "Credenciais incorretas",
                 });
             }
         }
     } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+        res.status(500).json({ success: false, message: "Erro interno" });
     }
 });
 

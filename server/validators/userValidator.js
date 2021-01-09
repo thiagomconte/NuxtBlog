@@ -25,7 +25,7 @@ module.exports = {
         } else if (password !== checkpassword) {
             res.status(500).json({
                 success: false,
-                message: "As senhas estão diferentes",
+                message: "As senhas não conferem",
             });
         } else {
             next();

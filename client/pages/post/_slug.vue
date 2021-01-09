@@ -16,7 +16,7 @@
         <span class="span-post imgOwner"> Autor: {{ post.imgOwner }}</span>
         <p class="content" v-html="post.content"></p>
         <hr />
-        <div v-if="$auth.$state.loggedIn" class="separator">
+        <div v-if="$store.state.isAuthenticated" class="separator">
             <p>Deixe um comentário!</p>
             <b-form-textarea
                 id="textarea-rows-comment"
@@ -40,7 +40,7 @@
             </h4>
             <h3 v-else class="mb-3">{{ comment.user_id.name }}:</h3>
             <p class="comment">{{ comment.content }}</p>
-            <a href="#" @click.prevent="onDeleteComment(comment._id, index)" v-if="$auth.$state.user && $auth.$state.user.isAdmin"
+            <a href="#" @click.prevent="onDeleteComment(comment._id, index)" v-if="$store.state.user.isAdmin"
                 ><i class="fa fa-trash" aria-hidden="true"></i>
             </a>
         </div>
@@ -89,16 +89,16 @@ export default {
                 this.comments.unshift({
                     content: this.content,
                     user_id: {
-                        name: this.$auth.$state.user.name,
-                        isAdmin: this.$auth.$state.user.isAdmin,
+                        name: this.$store.state.user.name,
+                        isAdmin: this.$store.state.user.isAdmin,
                     },
                     _id: response.comment_id
                 });
                 this.content = "";
                 this.numOfComments++;
-                this.$bvToast.toast("Adicionado", {
+                this.$bvToast.toast("Comentário adicionado", {
                     title: "Sucesso",
-                    autoHideDelay: 5000,
+                    autoHideDelay: 3000,
                     variant: "success",
                     toaster: "b-toaster-top-center",
                     solid: true,
@@ -106,7 +106,7 @@ export default {
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
-                    autoHideDelay: 5000,
+                    autoHideDelay: 3000,
                     variant: "danger",
                     toaster: "b-toaster-top-center",
                     solid: true,
@@ -124,7 +124,7 @@ export default {
                 }
                 this.$bvToast.toast("Comentário removida", {
                     title: "Sucesso",
-                    autoHideDelay: 5000,
+                    autoHideDelay: 3000,
                     variant: "success",
                     toaster: "b-toaster-top-center",
                     solid: true,
@@ -132,7 +132,7 @@ export default {
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
-                    autoHideDelay: 5000,
+                    autoHideDelay: 3000,
                     variant: "danger",
                     toaster: "b-toaster-top-center",
                     solid: true,

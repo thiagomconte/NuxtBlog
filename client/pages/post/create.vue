@@ -1,7 +1,7 @@
 <template>
     <div class="container container-create">
         <h1>Criar nova postagem</h1>
-        <hr class="hr-create"/>
+        <hr class="hr-create" />
         <form>
             <label>Título</label>
             <input type="text" v-model="title" />
@@ -20,7 +20,10 @@
             <input type="text" v-model="img" />
             <label>Autor da imagem</label>
             <input type="text" v-model="imgOwner" />
-            <a @click="onPostCreate" href="#" class="pull-left button-create mb-5"
+            <a
+                @click.prevent="onPostCreate"
+                href="#"
+                class="pull-left button-create mb-5"
                 >POSTAR</a
             >
         </form>
@@ -29,6 +32,7 @@
 
 <script>
 export default {
+    middleware: "redirectIfNoAdmin",
     data() {
         return {
             title: "",
@@ -55,16 +59,22 @@ export default {
                     "http://localhost:8080/post/add",
                     data
                 );
-                if (response.success) {
-                    this.$router.push("/");
-                }
+                this.$router.push("/", () => {
+                    this.$root.$bvToast.toast(response.message, {
+                        title: "Sucesso",
+                        autoHideDelay: 3000,
+                        variant: "success",
+                        toaster: "b-toaster-top-center",
+                        solid: true,
+                    });
+                });
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
                     autoHideDelay: 5000,
                     variant: "danger",
-                    toaster: 'b-toaster-top-center',
-                    solid: true
+                    toaster: "b-toaster-top-center",
+                    solid: true,
                 });
             }
         },
