@@ -57,7 +57,7 @@ import moment from "moment";
 export default {
     async asyncData({ $axios }) {
         try {
-            let response = await $axios.$get(`http://localhost:8080/post/1`);
+            let response = await $axios.$get(`/post/1`);
             return {
                 posts: response.posts,
                 tam: response.tam,
@@ -86,7 +86,7 @@ export default {
         async onDeletePost(id, index) {
             try {
                 let response = await this.$axios.$delete(
-                    `http://localhost:8080/post/delete/${id}`
+                    `/post/delete/${id}`
                 );
                 if (response.success) {
                     this.posts.splice(index, 1);
@@ -126,6 +126,7 @@ export default {
     margin-top: 20px;
     width: 100%;
     max-width: 270px;
+    max-height: 200px;
 }
 
 .h3-index {

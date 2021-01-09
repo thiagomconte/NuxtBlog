@@ -83,7 +83,7 @@ export default {
                 };
 
                 let responseR = await this.$axios.$post(
-                    "http://localhost:8080/user/register",
+                    "/user/register",
                     data
                 );
                 if (responseR.success) {

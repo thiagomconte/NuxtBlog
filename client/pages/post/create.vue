@@ -32,7 +32,7 @@
 
 <script>
 export default {
-    middleware: "redirectIfNoAdmin",
+    middleware: "redirectIfNoUser",
     data() {
         return {
             title: "",
@@ -56,7 +56,7 @@ export default {
                 };
 
                 let response = await this.$axios.$post(
-                    "http://localhost:8080/post/add",
+                    "/post/add",
                     data
                 );
                 this.$router.push("/", () => {

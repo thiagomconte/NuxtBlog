@@ -12,7 +12,7 @@
         </div>
 
         <hr />
-        <img :src="post.img" />
+        <img class="img-post" :src="post.img" />
         <span class="span-post imgOwner"> Autor: {{ post.imgOwner }}</span>
         <p class="content" v-html="post.content"></p>
         <hr />
@@ -53,7 +53,7 @@ export default {
     async asyncData({ $axios, params }) {
         try {
             let response = await $axios.$get(
-                `http://localhost:8080/post/getpost/${params.slug}`
+                `/post/getpost/${params.slug}`
             );
             return {
                 post: response.post,
@@ -79,7 +79,7 @@ export default {
         async onComment() {
             try {
                 let response = await this.$axios.$post(
-                    "http://localhost:8080/comment/add",
+                    "/comment/add",
                     {
                         content: this.content,
                         post_id: this.post._id,
@@ -116,7 +116,7 @@ export default {
         async onDeleteComment(id, index){
             try {
                 let response = await this.$axios.$delete(
-                    `http://localhost:8080/comment/delete/${id}`
+                    `/comment/delete/${id}`
                 );
                 if (response.success) {
                     this.comments.splice(index, 1);
@@ -159,6 +159,10 @@ export default {
 
 .info-comment {
     padding: 1rem 0;
+}
+
+.img-post{
+    max-width: 550px;
 }
 
 .head {

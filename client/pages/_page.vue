@@ -62,7 +62,7 @@ export default {
     async asyncData({ $axios, params }) {
         try {
             let response = await $axios.$get(
-                `http://localhost:8080/post/${params.page}`
+                `/post/${params.page}`
             );
             return {
                 posts: response.posts,
@@ -92,7 +92,7 @@ export default {
         async onDeletePost(id, index) {
             try {
                 let response = await this.$axios.$delete(
-                    `http://localhost:8080/post/delete/${id}`
+                    `/post/delete/${id}`
                 );
                 if (response.success) {
                     this.posts.splice(index, 1);
@@ -133,6 +133,7 @@ export default {
     margin-top: 20px;
     width: 100%;
     max-width: 270px;
+    max-height: 200px;
 }
 
 .operation {

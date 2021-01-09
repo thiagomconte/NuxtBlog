@@ -41,7 +41,7 @@
                         @click="onLogout"
                         v-if="$store.state.isAuthenticated"
                         class="nav-link"
-                        href="#"
+                        href="/"
                     >
                         <i class="fa fa-sign-out" aria-hidden="true"></i>
                         Sair
@@ -80,7 +80,7 @@
 export default {
     methods: {
         async onLogout() {
-            this.$store.dispatch('logout')
+            await this.$store.dispatch('logout')
         },
     },
 };

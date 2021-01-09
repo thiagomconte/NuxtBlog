@@ -6,10 +6,10 @@ const {
     postValidator,
     postUpdateValidator,
 } = require("../validators/postValidator");
-const { isAuth } = require("../authencitaction/authorization");
+const { isAdmin } = require("../authencitaction/authorization");
 
 //! CREATE NEW POST
-router.post("/add", postValidator, isAuth, async (req, res) => {
+router.post("/add", postValidator, isAdmin, async (req, res) => {
     let { title, description, slug, content, img, imgOwner } = req.body;
 
     try {
@@ -85,7 +85,7 @@ router.get("/getpost/:slug", async (req, res) => {
 });
 
 //! EDIT POST
-router.get("/edit/:slug", async (req, res) => {
+router.get("/edit/:slug", isAdmin, async (req, res) => {
     try {
         const post = await Post.findOne({ slug: req.params.slug });
         if (!post) {
@@ -106,7 +106,7 @@ router.get("/edit/:slug", async (req, res) => {
     }
 });
 
-router.post("/edit/:slug", postUpdateValidator, async (req, res) => {
+router.post("/edit/:slug", postUpdateValidator, isAdmin, async (req, res) => {
     let { title, description, slug, content, img, imgOwner } = req.body;
     try {
         post = await Post.findOneAndUpdate(
@@ -134,7 +134,7 @@ router.post("/edit/:slug", postUpdateValidator, async (req, res) => {
 });
 
 //! DELETE POST
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", isAdmin, async (req, res) => {
     try {
         const post = await Post.findOneAndDelete({ _id: req.params.id });
         await Comment.deleteMany({ post_id: post._id });

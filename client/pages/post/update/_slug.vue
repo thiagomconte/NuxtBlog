@@ -35,7 +35,7 @@ export default {
     async asyncData({ $axios, params }) {
         try {
             let response = await $axios.$get(
-                `http://localhost:8080/post/edit/${params.slug}`
+                `/post/edit/${params.slug}`
             );
             return{
                 title: response.post.title,
@@ -74,7 +74,7 @@ export default {
                 };
 
                 let response = await this.$axios.$post(
-                    `http://localhost:8080/post/edit/${this.paramsSlug}`,
+                    `/post/edit/${this.paramsSlug}`,
                     data
                 );
                 if (response.success) {
