@@ -1,11 +1,12 @@
 export async function nuxtServerInit({ commit, dispatch }, { req, res }) {
   if (this.$cookies.get("token")) {
-    this.$axios.setHeader("Authorization", this.$cookies.get("token"));
+    this.$axios.setToken(this.$cookies.get("token"));
     await this.$axios
       .$get("/user/profile")
       .then(response => {
         commit("setUser", response.user);
         commit("setAuthenticated", true);
+        commit("setToken", this.$cookies.get("token"));
         if (response.user.isAdmin) {
           commit("setAdmin", true);
         } else {
@@ -36,7 +37,7 @@ export function authError({ commit }) {
   delete this.$axios.defaults.headers.common["Authorization"];
   this.$cookies.remove("token");
   this.$router.push("/", () => {
-    alert("Erro de autenticação")
+    alert("Erro de autenticação");
   });
 }
 
@@ -49,7 +50,7 @@ export function login({ commit }, { email, password }) {
       })
       .then(response => {
         if (response.success) {
-          this.$axios.setHeader("Authorization", response.token);
+          this.$axios.setToken(response.token);
           this.$axios
             .$get("/user/profile")
             .then(res => {
@@ -57,6 +58,7 @@ export function login({ commit }, { email, password }) {
                 path: "/",
                 maxAge: 604800
               });
+              commit("setToken", response.token);
               commit("setUser", res.user);
               commit("setAdmin", true);
               commit("setAuthenticated", true);
@@ -71,4 +73,8 @@ export function login({ commit }, { email, password }) {
         reject(err.response.data.message);
       });
   });
+}
+
+export function updateUser({ commit }, name) {
+  commit("setUpdateUser", name);
 }

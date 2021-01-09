@@ -1,7 +1,7 @@
 <template>
-    <div class="container container-index">
+    <div class="container ">
         <div
-            class="row mt-5 mb-5"
+            class="row mt-5 mb-5 container-index"
             v-for="(post, index) in posts"
             :key="post._id"
         >

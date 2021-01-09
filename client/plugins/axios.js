@@ -1,8 +1,15 @@
+import * as getters from '../store/state';
+
 export default function({ $axios, store }) {
+  $axios.onRequest(config => {
+    if(store.getters.getToken){
+      config.headers.Authorization = store.getters.getToken
+    }
+  });
+
   $axios.onError(error => {
-    const code = parseInt(error.response && error.response.status);
-    if (code === 403) {
-      store.dispatch('authError')
+    if (error.response.status === 403) {
+      store.dispatch("authError");
     }
   });
 }

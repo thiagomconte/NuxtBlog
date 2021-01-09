@@ -37,6 +37,14 @@
                         <i class="fa fa-plus-square-o" aria-hidden="true"></i>
                         Adicionar postagem
                     </NuxtLink>
+                    <NuxtLink
+                        v-if="$store.state.isAuthenticated"
+                        class="nav-link"
+                        to="/profile"
+                    >
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        Perfil
+                    </NuxtLink>
                     <a
                         @click="onLogout"
                         v-if="$store.state.isAuthenticated"

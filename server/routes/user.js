@@ -3,7 +3,7 @@ const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
 const passport = require("passport");
 const { validateNewUser } = require("../validators/userValidator");
-const { isAuth } = require("../authencitaction/authorization")
+const { isAuth } = require("../authencitaction/authorization");
 const jwt = require("jsonwebtoken");
 
 //! POST REQUEST - NEW USER
@@ -75,17 +75,41 @@ router.post("/login", async (req, res) => {
 //! PROFILE ROUTER
 router.get("/profile", isAuth, async (req, res) => {
     try {
-      let user = await User.findOne({ _id: req.decoded._id });
-      if (user) {
-        res.json({
-          success: true,
-          user: user,
-        });
-      }
+        let user = await User.findOne({ _id: req.decoded._id });
+        if (user) {
+            res.json({
+                success: true,
+                user: user,
+            });
+        }
     } catch (err) {
-      res.status(500).json({ success: false, message: err.message });
+        res.status(500).json({ success: false, message: "Erro interno" });
     }
 });
 
+router.post("/update", isAuth, async (req, res) => {
+    try {
+        let { name, password } = req.body;
+        let user = await User.findByIdAndUpdate({ _id: req.decoded._id });
+        if (name) user.name = name;
+        if (password && password.length > 8) {
+            user.password = password;
+        } else if (password && password.length < 8) {
+            res.status(500).json({
+                success: false,
+                message: "A senha deve conter no mínimo 8 caracteres",
+            });
+        } else {
+            await user.save();
+            res.json({
+                success: true,
+                message: "Perfil atualizado com sucesso",
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, message: "Erro interno" });
+    }
+});
 
 module.exports = router;

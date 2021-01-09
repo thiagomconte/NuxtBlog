@@ -12,6 +12,7 @@ module.exports = {
             }
             jwt.verify(token, process.env.SECRET, async (err, decoded) => {
                 if (err) {
+                    console.log(err)
                     res.status(403).json({
                         success: false,
                         message: "Failed to authenticate",
@@ -22,6 +23,7 @@ module.exports = {
                         req.decoded = decoded;
                         next();
                     } else {
+                        console.log(err)
                         res.status(403).json({
                             success: false,
                             message: "Failed to authenticate",

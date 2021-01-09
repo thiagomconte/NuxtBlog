@@ -1,6 +1,6 @@
 <template>
-    <div class="container container-index">
-        <div class="row mt-5 mb-5" v-for="(post, index) in posts" :key="post._id">
+    <div class="container">
+        <div class="row mt-5 mb-5 container-index" v-for="(post, index) in posts" :key="post._id">
             <div class="col-lg-3">
                 <NuxtLink :to="`/post/${post.slug}`">
                     <img
