@@ -16,7 +16,7 @@
         <span class="span-post imgOwner"> Autor: {{ post.imgOwner }}</span>
         <p class="content" v-html="post.content"></p>
         <hr />
-        <div v-if="$store.state.isAuthenticated" class="separator">
+        <div v-show="$store.state.isAuthenticated" class="separator">
             <p>Deixe um comentário!</p>
             <b-form-textarea
                 id="textarea-rows-comment"
@@ -28,7 +28,7 @@
                 Comentar <i class="fa fa-comments" aria-hidden="true"></i>
             </button>
         </div>
-        <h4 class="info-comment" v-else>
+        <h4 class="info-comment" v-show="!$store.state.isAuthenticated">
             Para participar dos comentários, você precisa criar uma
             <NuxtLink to="/register">conta.</NuxtLink>
         </h4>
@@ -38,22 +38,22 @@
             v-for="(comment, index) in comments.slice(0, showComments)"
             :key="comment._id"
         >
-            <h4 v-if="comment.user_id.isAdmin" class="mb-3">
+            <h4 v-show="comment.user_id.isAdmin" class="mb-3">
                 <i class="fa fa-check-square" aria-hidden="true"></i>
                 {{ comment.user_id.name }}:
             </h4>
-            <h3 v-else class="mb-3">{{ comment.user_id.name }}:</h3>
+            <h3 v-show="!comment.user_id.isAdmin" class="mb-3">{{ comment.user_id.name }}:</h3>
             <p class="comment">{{ comment.content }}</p>
             <a
                 href="#"
                 @click.prevent="onDeleteComment(comment._id, index)"
-                v-if="$store.state.user.isAdmin"
+                v-show="$store.state.user.isAdmin"
                 ><i class="fa fa-trash" aria-hidden="true"></i>
             </a>
         </div>
         <button
             @click.prevent="loadComments"
-            v-if="showComments < numOfComments"
+            v-show="showComments < numOfComments"
             class="load-comments"
         >
             Carregar mais comentários

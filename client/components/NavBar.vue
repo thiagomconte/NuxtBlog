@@ -14,7 +14,7 @@
                         <span>Home</span>
                     </NuxtLink>
                     <NuxtLink
-                        v-if="!$store.state.isAuthenticated"
+                        v-show="!$store.state.isAuthenticated"
                         class="nav-link"
                         to="/login"
                     >
@@ -22,7 +22,7 @@
                         Login
                     </NuxtLink>
                     <NuxtLink
-                        v-if="!$store.state.isAuthenticated"
+                        v-show="!$store.state.isAuthenticated"
                         class="nav-link"
                         to="/register"
                     >
@@ -30,7 +30,7 @@
                         Registrar
                     </NuxtLink>
                     <NuxtLink
-                        v-if="$store.state.user.isAdmin"
+                        v-show="$store.state.user.isAdmin"
                         class="nav-link"
                         to="/post/create"
                     >
@@ -38,7 +38,7 @@
                         Criar postagem
                     </NuxtLink>
                     <NuxtLink
-                        v-if="$store.state.isAuthenticated"
+                        v-show="$store.state.isAuthenticated"
                         class="nav-link"
                         to="/profile"
                     >
@@ -46,7 +46,7 @@
                         Perfil
                     </NuxtLink>
                     <NuxtLink
-                        v-if="$store.state.isAuthenticated"
+                        v-show="$store.state.isAuthenticated"
                         class="nav-link"
                         to="/admin"
                     >
@@ -55,7 +55,7 @@
                     </NuxtLink>
                     <a
                         @click="onLogout"
-                        v-if="$store.state.isAuthenticated"
+                        v-show="$store.state.isAuthenticated"
                         class="nav-link"
                         href="/"
                     >
@@ -69,7 +69,7 @@
                     <NuxtLink
                         class="nav-link mr-2"
                         to="/profile"
-                        v-if="$store.state.isAuthenticated"
+                        v-show="$store.state.isAuthenticated"
                     >
                         Olá, {{ $store.state.user.name }}
                     </NuxtLink>
