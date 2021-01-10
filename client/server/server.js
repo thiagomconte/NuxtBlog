@@ -21,7 +21,7 @@ app.use("/comment", require("./routes/comment"));
 app.use("/admin", require("./routes/admin"));
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, function () {
+app.listen(PORT, '0.0.0.0',function () {
     console.log(`Server running on port ${PORT}`);
 });
 
