@@ -1,5 +1,6 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
+
   head: {
     title: "Paixão Tricolor",
     meta: [
@@ -48,4 +49,6 @@ export default {
   server: {
     port: process.env.PORT || 3000
   },
+
+  serverMiddleware: ["~/server/server.js"],
 };
