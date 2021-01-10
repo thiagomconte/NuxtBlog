@@ -1,5 +1,5 @@
 <template>
-    <div class="container container-post" v-if="loaded">
+    <div class="container container-post">
         <!-- Post area -->
         <h1 class="h1-post">{{ post.title }}</h1>
         <hr />
@@ -64,9 +64,9 @@
 <script>
 import moment from "moment";
 export default {
-    async asyncData({ $axios, params }) {
+    async asyncData({ $axios, route }) {
         try {
-            let response = await $axios.$get(`/post/getpost/${params.slug}`);
+            let response = await $axios.$get(`/post/getpost/${route.query.slug}`);
             return {
                 post: response.post,
                 comments: response.comments,
@@ -76,13 +76,6 @@ export default {
             console.log(err);
         }
     },
-    created() {
-        var self = this;
-
-        self.$nextTick(function () {
-            self.loaded = true;
-        });
-    },
     data() {
         return {
             content: "",
@@ -90,7 +83,6 @@ export default {
             numOfComments: 0,
             showComments: 5,
             confirm: "",
-            loaded: ""
         };
     },
     methods: {

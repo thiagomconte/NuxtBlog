@@ -13,55 +13,60 @@
                         <i class="fa fa-home"></i>
                         <span>Home</span>
                     </NuxtLink>
-                    <NuxtLink
-                        v-show="!$store.state.isAuthenticated"
-                        class="nav-link"
-                        to="/login"
-                    >
-                        <i class="fa fa-sign-in" aria-hidden="true"></i>
-                        Login
-                    </NuxtLink>
-                    <NuxtLink
-                        v-show="!$store.state.isAuthenticated"
-                        class="nav-link"
-                        to="/register"
-                    >
-                        <i class="fa fa-sign-in" aria-hidden="true"></i>
-                        Registrar
-                    </NuxtLink>
-                    <NuxtLink
-                        v-show="$store.state.user.isAdmin"
-                        class="nav-link"
-                        to="/post/create"
-                    >
-                        <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-                        Criar postagem
-                    </NuxtLink>
-                    <NuxtLink
-                        v-show="$store.state.isAuthenticated"
-                        class="nav-link"
-                        to="/profile"
-                    >
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        Perfil
-                    </NuxtLink>
-                    <NuxtLink
-                        v-show="$store.state.isAuthenticated"
-                        class="nav-link"
-                        to="/admin"
-                    >
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                        Admin
-                    </NuxtLink>
-                    <a
-                        @click="onLogout"
-                        v-show="$store.state.isAuthenticated"
-                        class="nav-link"
-                        href="/"
-                    >
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>
-                        Sair
-                    </a>
+                    <client-only>
+                        <NuxtLink
+                            v-show="!$store.state.isAuthenticated"
+                            class="nav-link"
+                            to="/login"
+                        >
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            Login
+                        </NuxtLink>
+                        <NuxtLink
+                            v-show="!$store.state.isAuthenticated"
+                            class="nav-link"
+                            to="/register"
+                        >
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            Registrar
+                        </NuxtLink>
+                        <NuxtLink
+                            v-show="$store.state.user.isAdmin"
+                            class="nav-link"
+                            to="/post/create"
+                        >
+                            <i
+                                class="fa fa-plus-square-o"
+                                aria-hidden="true"
+                            ></i>
+                            Criar postagem
+                        </NuxtLink>
+                        <NuxtLink
+                            v-show="$store.state.isAuthenticated"
+                            class="nav-link"
+                            to="/profile"
+                        >
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            Perfil
+                        </NuxtLink>
+                        <NuxtLink
+                            v-show="$store.state.isAuthenticated"
+                            class="nav-link"
+                            to="/admin"
+                        >
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                            Admin
+                        </NuxtLink>
+                        <a
+                            @click="onLogout"
+                            v-show="$store.state.isAuthenticated"
+                            class="nav-link"
+                            href="/"
+                        >
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            Sair
+                        </a>
+                    </client-only>
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->

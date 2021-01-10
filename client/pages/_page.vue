@@ -6,7 +6,7 @@
             :key="post._id"
         >
             <div class="col-lg-3">
-                <NuxtLink :to="`/post/${post.slug}`">
+                <NuxtLink :to="`/post/?slug=${post.slug}`">
                     <img
                         class="img-responsive postImg mt-auto"
                         :src="post.img"
@@ -23,13 +23,13 @@
                     </li>
                 </ul>
                 <NuxtLink
-                    :to="`/post/${post.slug}`"
+                    :to="`/post/?slug=${post.slug}`"
                     class="list-unstyled list-inline media-detail pull-right button-index ml-1"
                     >LEIA MAIS</NuxtLink
                 >
                 <NuxtLink
                     v-if="$store.state.user.isAdmin"
-                    :to="`/post/update/${post.slug}`"
+                    :to="`/post/update/?slug=${post.slug}`"
                     class="operation"
                     ><i class="fa fa-refresh" aria-hidden="true"></i>
                 </NuxtLink>

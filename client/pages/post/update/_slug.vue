@@ -33,10 +33,10 @@
 <script>
 export default {
     middleware: "redirectIfNoAdmin",
-    async asyncData({ $axios, params }) {
+    async asyncData({ $axios, route }) {
         try {
             let response = await $axios.$get(
-                `/post/edit/${params.slug}`
+                `/post/edit/${route.query.slug}`
             );
             return{
                 title: response.post.title,
