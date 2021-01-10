@@ -36,7 +36,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: process.env.BASE_URL || "http://localhost:8080"
+    baseURL: process.env.BASE_URL || "http://localhost:3000"
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
@@ -50,5 +50,5 @@ export default {
     port: process.env.PORT || 3000
   },
 
-  serverMiddleware: ["~/server/server.js"],
+  serverMiddleware: ["~/server/server"]
 };

@@ -20,9 +20,4 @@ app.use("/post", require("./routes/post"));
 app.use("/comment", require("./routes/comment"));
 app.use("/admin", require("./routes/admin"));
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, '0.0.0.0',function () {
-    console.log(`Server running on port ${PORT}`);
-});
-
-module.exports = { path: '/api', handler: app }
+module.exports = { path: '/', handler: app }
