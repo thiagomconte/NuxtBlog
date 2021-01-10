@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 mongoose
-    .connect(process.env.MONGO_CONN_STRING, {
+    .connect("mongodb+srv://guevers:2402conte@cluster0-qalff.mongodb.net/BlogSP?retryWrites=true&w=majority", {
         useFindAndModify: false,
         useUnifiedTopology: true,
         useNewUrlParser: true,
