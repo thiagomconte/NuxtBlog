@@ -43,30 +43,23 @@
             </div>
             <hr class="hr-index" />
         </div>
-        <b-pagination-nav
-            pills
-            size="sm"
-            :link-gen="linkGen"
-            :number-of-pages="totalPages"
-            v-model="currentPage"
-            align="center"
-            use-router
-            v-if="totalPages >= 1"
-        ></b-pagination-nav>
     </div>
 </template>
 
 <script>
 import moment from "moment";
 export default {
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, params, redirect }) {
         try {
-            let response = await $axios.$get(`/post/1`);
+            let response = {}
+            if(!params.input) {
+                redirect('/')
+            }else{
+                response = await $axios.$get(`/post/search/${params.input}`);
+            }
             return {
                 posts: response.posts,
                 tam: response.tam,
-                totalPages: Math.ceil(response.tam / 5),
-                currentPage: 1,
             };
         } catch (err) {
             console.log(err);
@@ -76,17 +69,12 @@ export default {
         return {
             posts: [{}],
             tam: 0,
-            totalPages: 0,
-            confirm: "",
         };
     },
     methods: {
         formatDate(date) {
             moment.locale("pt-br");
             return moment(date, "YYYYMMDD").fromNow();
-        },
-        linkGen(pageNum) {
-            return pageNum === 1 ? "?" : `/${pageNum}`;
         },
         async onDeletePost(id, index) {
             try {

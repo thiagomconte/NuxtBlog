@@ -32,7 +32,7 @@
 
 <script>
 export default {
-    middleware: "redirectIfNoUser",
+    middleware: "redirectIfNoAdmin",
     data() {
         return {
             title: "",

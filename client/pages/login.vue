@@ -38,6 +38,13 @@
                     Ainda não é cadastrado? Crie uma conta
                     <NuxtLink class="redirect" to="/register">aqui</NuxtLink>
                 </p>
+                <div class="overlay" v-if="showSpinner">
+                    <div class="overlay__wrapper">
+                        <div class="overlay__spinner">
+                            <b-spinner class="spinner"></b-spinner>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -50,16 +57,19 @@ export default {
         return {
             email: "",
             password: "",
+            showSpinner: false
         };
     },
     methods: {
         async onLogin() {
+            this.showSpinner = true;
             this.$store
                 .dispatch("login", {
                     email: this.email,
                     password: this.password,
                 })
                 .catch((err) => {
+                    this.showSpinner = false;
                     this.$bvToast.toast(err, {
                         title: "Erro",
                         autoHideDelay: 3000,
@@ -122,20 +132,35 @@ body {
     margin-top: 20px;
 }
 
-.registration-form .social-media {
-    max-width: 600px;
-    background-color: #fff;
-    margin: auto;
-    padding: 35px 0;
-    text-align: center;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    color: #9fadca;
-    border-top: 1px solid #dee9ff;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
 }
 
+.overlay__wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
 
+.overlay__spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    display: block;
+    margin: 0 auto;
+    height: 5rem;
+    width: 5rem;
+    color: rgb(255, 83, 83);
+}
 
 @media (max-width: 576px) {
     .registration-form form {

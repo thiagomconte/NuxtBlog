@@ -1,45 +1,71 @@
 const router = require("express").Router();
-const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
-const passport = require("passport");
 const { validateNewUser } = require("../validators/userValidator");
-const { isAuth } = require("../authencitaction/authorization");
+const { isAuth, isAdmin } = require("../authencitaction/authorization");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
+//nodemailer
+var transporter = nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+    },
+});
 
 //! POST REQUEST - NEW USER
 router.post("/register", validateNewUser, async (req, res) => {
     let { name, email, password } = req.body;
-    let user = new User();
-    user.name = name;
-    user.email = email;
-    user.password = password;
-
-    await user.save((err) => {
-        if (err) {
-            var string = JSON.stringify(err);
-            var obj = JSON.parse(string);
-            if (obj.keyPattern.email) {
-                res.status(400).json({
+    let userFound = await User.findOne({ email: email });
+    if (userFound) {
+        res.status(401).json({
+            success: false,
+            message: "Este e-mail já se encontra em uso",
+        });
+    } else {
+        let user = new User();
+        user.name = name;
+        user.email = email;
+        user.password = password;
+        var mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Verificação",
+            text:
+                "Este é um e-mail de verificação. Obrigado por se cadastrar e acompanhar o Paixão Tricolor",
+        };
+        transporter.sendMail(mailOptions, async function (err, info) {
+            if (err) {
+                res.status(401).json({
                     success: false,
-                    message: "Este e-mail já se encontra em uso",
+                    message: "E-mail inválido",
                 });
             } else {
-                res.status(500).json({
-                    success: false,
-                    message: "Tente novamente mais tarde",
+                await user.save((err) => {
+                    if (err) {
+                        res.status(500).json({
+                            success: false,
+                            message: "Tente novamente mais tarde",
+                        });
+                    } else {
+                        let token = jwt.sign(
+                            user.toJSON(),
+                            process.env.SECRET,
+                            {
+                                expiresIn: 604800, //1 week
+                            }
+                        );
+                        res.json({
+                            success: true,
+                            token: token,
+                            message: "Sua conta foi criada com sucesso",
+                        });
+                    }
                 });
             }
-        } else {
-            let token = jwt.sign(user.toJSON(), process.env.SECRET, {
-                expiresIn: 604800, //1 week
-            });
-            res.json({
-                success: true,
-                token: token,
-                message: "Sua conta foi criada com sucesso",
-            });
-        }
-    });
+        });
+    }
 });
 
 //! LOGIN
@@ -109,6 +135,21 @@ router.post("/update", isAuth, async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, message: "Erro interno" });
+    }
+});
+
+router.get("/users", isAdmin, async (req, res) => {
+    try {
+        let users = await User.find().select("name email isAdmin").sort({ name: "asc" });
+        res.json({
+            success: true,
+            users: users,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Não foi possível carregar a lista de usuários",
+        });
     }
 });
 

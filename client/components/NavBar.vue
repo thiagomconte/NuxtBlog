@@ -35,7 +35,7 @@
                         to="/post/create"
                     >
                         <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-                        Adicionar postagem
+                        Criar postagem
                     </NuxtLink>
                     <NuxtLink
                         v-if="$store.state.isAuthenticated"
@@ -44,6 +44,14 @@
                     >
                         <i class="fa fa-user" aria-hidden="true"></i>
                         Perfil
+                    </NuxtLink>
+                    <NuxtLink
+                        v-if="$store.state.isAuthenticated"
+                        class="nav-link"
+                        to="/admin"
+                    >
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        Admin
                     </NuxtLink>
                     <a
                         @click="onLogout"
@@ -63,19 +71,19 @@
                         to="/profile"
                         v-if="$store.state.isAuthenticated"
                     >
-                        Olá, {{ $store.state.user.name}}
+                        Olá, {{ $store.state.user.name }}
                     </NuxtLink>
                     <b-nav-form>
                         <b-form-input
+                            v-model="input"
                             class="mr-sm-2"
-                            placeholder="Search"
-                        ></b-form-input>
-                        <b-button
-                            variant="danger"
-                            class="my-2 my-sm-0"
                             placeholder="Buscar postagem"
-                            type="submit"
-                            >Buscar</b-button
+                        ></b-form-input>
+                        <NuxtLink
+                            :to="`/search/${this.input}`"
+                            variant="danger"
+                            class="my-2 my-sm-0 search-button-nav"
+                            >BUSCAR</NuxtLink
                         >
                     </b-nav-form>
                 </b-navbar-nav>
@@ -86,35 +94,58 @@
 
 <script>
 export default {
+    data() {
+        return {
+            input: "",
+        };
+    },
     methods: {
         async onLogout() {
-            await this.$store.dispatch('logout')
+            await this.$store.dispatch("logout");
         },
     },
 };
 </script>
 
 <style>
-.nav-link{
+.nav-link {
     font-size: 16px;
 }
 
-.nav-link i{
+.nav-link i {
     font-size: 20px;
 }
 
-.navbar-brand{
+.navbar-brand {
     font-size: 24px;
 }
 
-@media(min-width: 1024px){
-    .nav-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 0.5rem;
-    margin-left: 0.5rem;
-}
+.search-button-nav {
+    display: block;
+    width: 100px;
+    height: 40px;
+    background: rgb(250, 83, 83);
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
 }
 
+.search-button-nav:hover {
+    text-decoration: none;
+    color: white;
+    background: rgb(247, 0, 0);
+}
+
+@media (min-width: 1024px) {
+    .nav-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+    }
+}
 </style>

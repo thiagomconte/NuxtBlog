@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Post = require("../models/post");
-const User = require("../models/user")
-const Comment = require("../models/comment")
+const User = require("../models/user");
+const Comment = require("../models/comment");
 const {
     postValidator,
     postUpdateValidator,
@@ -61,8 +61,12 @@ router.get("/:page", async (req, res) => {
 router.get("/getpost/:slug", async (req, res) => {
     try {
         const post = await Post.findOne({ slug: req.params.slug });
-        const comments = await Comment.find({ post_id: post._id}).populate({path:'user_id', select:'-password -_id -email'}).sort({ _id: "desc" }).exec()
-        const numOfComments = (await Comment.find({post_id: post._id})).length
+        const comments = await Comment.find({ post_id: post._id })
+            .populate({ path: "user_id", select: "-password -_id -email" })
+            .sort({ _id: "desc" })
+            .exec();
+        const numOfComments = (await Comment.find({ post_id: post._id }))
+            .length;
         if (!post) {
             return res.status(404).json({
                 success: false,
@@ -73,7 +77,7 @@ router.get("/getpost/:slug", async (req, res) => {
             success: true,
             post: post,
             comments: comments,
-            numOfComments: numOfComments
+            numOfComments: numOfComments,
         });
     } catch (error) {
         console.log(error);
@@ -147,6 +151,23 @@ router.delete("/delete/:id", isAdmin, async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Erro interno, não foi possível deletar a postagem.",
+        });
+    }
+});
+
+router.get("/search/:input", async (req, res) => {
+    try {
+        let posts = await Post.find({
+            title: { $regex: req.params.input, $options: "si" },
+        }).sort({ _id: "desc" });
+        res.json({
+            success: true,
+            posts: posts,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Erro interno, tente novamente.",
         });
     }
 });

@@ -32,6 +32,7 @@
 
 <script>
 export default {
+    middleware: "redirectIfNoAdmin",
     async asyncData({ $axios, params }) {
         try {
             let response = await $axios.$get(

@@ -1,5 +1,5 @@
 <template>
-    <div class="container ">
+    <div class="container">
         <div
             class="row mt-5 mb-5 container-index"
             v-for="(post, index) in posts"
@@ -61,9 +61,7 @@ import moment from "moment";
 export default {
     async asyncData({ $axios, params }) {
         try {
-            let response = await $axios.$get(
-                `/post/${params.page}`
-            );
+            let response = await $axios.$get(`/post/${params.page}`);
             return {
                 posts: response.posts,
                 tam: response.tam,
@@ -79,6 +77,7 @@ export default {
             posts: [{}],
             tam: 0,
             totalPages: 0,
+            confirm: ""
         };
     },
     methods: {
@@ -91,19 +90,40 @@ export default {
         },
         async onDeletePost(id, index) {
             try {
-                let response = await this.$axios.$delete(
-                    `/post/delete/${id}`
-                );
-                if (response.success) {
-                    this.posts.splice(index, 1);
+                await this.$bvModal
+                    .msgBoxConfirm("Tem certeza?", {
+                        okTitle: "Sim",
+                        cancelTitle: "Cancelar",
+                        okVariant: "danger",
+                    })
+                    .then((value) => {
+                        this.confirm = value;
+                    })
+                    .catch((err) => {
+                        this.$bvToast.toast("Tente novamente", {
+                            title: "Erro",
+                            autoHideDelay: 3000,
+                            variant: "danger",
+                            toaster: "b-toaster-top-center",
+                            solid: true,
+                        });
+                    });
+
+                if (this.confirm) {
+                    let response = await this.$axios.$delete(
+                        `/post/delete/${id}`
+                    );
+                    if (response.success) {
+                        this.posts.splice(index, 1);
+                    }
+                    this.$bvToast.toast("Postagem removida", {
+                        title: "Sucesso",
+                        autoHideDelay: 5000,
+                        variant: "success",
+                        toaster: "b-toaster-top-center",
+                        solid: true,
+                    });
                 }
-                this.$bvToast.toast("Postagem removida", {
-                    title: "Sucesso",
-                    autoHideDelay: 5000,
-                    variant: "success",
-                    toaster: "b-toaster-top-center",
-                    solid: true,
-                });
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",

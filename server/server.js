@@ -10,7 +10,7 @@ const app = express();
 require("./dataBase/mongodbConn");
 
 //! MIDDLEWARES
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", require("./routes/user"));
 app.use("/post", require("./routes/post"));
 app.use("/comment", require("./routes/comment"));
+app.use("/admin", require("./routes/admin"));
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, function () {

@@ -56,6 +56,13 @@
                     Já possui uma conta? Entre
                     <NuxtLink class="redirect" to="/login">aqui</NuxtLink>
                 </p>
+                <div class="overlay" v-if="showSpinner">
+                    <div class="overlay__wrapper">
+                        <div class="overlay__spinner">
+                            <b-spinner class="spinner"></b-spinner>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -70,11 +77,13 @@ export default {
             email: "",
             password: "",
             checkpassword: "",
+            showSpinner: false,
         };
     },
     methods: {
         async onRegisterUser() {
             try {
+                this.showSpinner = true;
                 let data = {
                     name: this.name,
                     email: this.email,
@@ -82,10 +91,7 @@ export default {
                     checkpassword: this.checkpassword,
                 };
 
-                let responseR = await this.$axios.$post(
-                    "/user/register",
-                    data
-                );
+                let responseR = await this.$axios.$post("/user/register", data);
                 if (responseR.success) {
                     this.$store
                         .dispatch("login", {
@@ -103,6 +109,7 @@ export default {
                         });
                 }
             } catch (err) {
+                this.showSpinner = false;
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
                     autoHideDelay: 5000,
@@ -117,8 +124,12 @@ export default {
 </script>
 
 <style>
-body {
-    background-color: rgba(221, 221, 221, 0.3);
+.spinner {
+    height: 3rem;
+    width: 3rem;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
 }
 
 .registration-form {
@@ -165,12 +176,39 @@ body {
     margin-top: 20px;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
 
+.overlay__wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.overlay__spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    display: block;
+    margin: 0 auto;
+    height: 5rem;
+    width: 5rem;
+    color: rgb(255, 83, 83);
+}
 
 @media (max-width: 576px) {
     .registration-form form {
         padding: 50px 20px;
     }
-
 }
 </style>

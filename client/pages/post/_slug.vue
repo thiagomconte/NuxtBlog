@@ -33,17 +33,31 @@
             <NuxtLink to="/register">conta.</NuxtLink>
         </h4>
         <h5>Comentários ({{ numOfComments }}):</h5>
-        <div class="card mb-3" v-for="(comment, index) in comments" :key="comment._id">
+        <div
+            class="card mb-3"
+            v-for="(comment, index) in comments.slice(0, showComments)"
+            :key="comment._id"
+        >
             <h4 v-if="comment.user_id.isAdmin" class="mb-3">
                 <i class="fa fa-check-square" aria-hidden="true"></i>
                 {{ comment.user_id.name }}:
             </h4>
             <h3 v-else class="mb-3">{{ comment.user_id.name }}:</h3>
             <p class="comment">{{ comment.content }}</p>
-            <a href="#" @click.prevent="onDeleteComment(comment._id, index)" v-if="$store.state.user.isAdmin"
+            <a
+                href="#"
+                @click.prevent="onDeleteComment(comment._id, index)"
+                v-if="$store.state.user.isAdmin"
                 ><i class="fa fa-trash" aria-hidden="true"></i>
             </a>
         </div>
+        <button
+            @click.prevent="loadComments"
+            v-if="showComments < numOfComments"
+            class="load-comments"
+        >
+            Carregar mais comentários
+        </button>
     </div>
 </template>
 
@@ -52,9 +66,7 @@ import moment from "moment";
 export default {
     async asyncData({ $axios, params }) {
         try {
-            let response = await $axios.$get(
-                `/post/getpost/${params.slug}`
-            );
+            let response = await $axios.$get(`/post/getpost/${params.slug}`);
             return {
                 post: response.post,
                 comments: response.comments,
@@ -69,6 +81,8 @@ export default {
             content: "",
             comments: [{}],
             numOfComments: 0,
+            showComments: 5,
+            confirm: "",
         };
     },
     methods: {
@@ -78,13 +92,10 @@ export default {
         },
         async onComment() {
             try {
-                let response = await this.$axios.$post(
-                    "/comment/add",
-                    {
-                        content: this.content,
-                        post_id: this.post._id,
-                    }
-                );
+                let response = await this.$axios.$post("/comment/add", {
+                    content: this.content,
+                    post_id: this.post._id,
+                });
 
                 this.comments.unshift({
                     content: this.content,
@@ -92,7 +103,7 @@ export default {
                         name: this.$store.state.user.name,
                         isAdmin: this.$store.state.user.isAdmin,
                     },
-                    _id: response.comment_id
+                    _id: response.comment_id,
                 });
                 this.content = "";
                 this.numOfComments++;
@@ -113,22 +124,43 @@ export default {
                 });
             }
         },
-        async onDeleteComment(id, index){
+        async onDeleteComment(id, index) {
             try {
-                let response = await this.$axios.$delete(
-                    `/comment/delete/${id}`
-                );
-                if (response.success) {
-                    this.comments.splice(index, 1);
-                    this.numOfComments--
+                await this.$bvModal
+                    .msgBoxConfirm("Tem certeza?", {
+                        okTitle: "Sim",
+                        cancelTitle: "Cancelar",
+                        okVariant: "danger",
+                    })
+                    .then((value) => {
+                        this.confirm = value;
+                    })
+                    .catch((err) => {
+                        this.$bvToast.toast("Tente novamente", {
+                            title: "Erro",
+                            autoHideDelay: 3000,
+                            variant: "danger",
+                            toaster: "b-toaster-top-center",
+                            solid: true,
+                        });
+                    });
+
+                if (this.confirm) {
+                    let response = await this.$axios.$delete(
+                        `/comment/delete/${id}`
+                    );
+                    if (response.success) {
+                        this.comments.splice(index, 1);
+                        this.numOfComments--;
+                    }
+                    this.$bvToast.toast("Comentário removida", {
+                        title: "Sucesso",
+                        autoHideDelay: 3000,
+                        variant: "success",
+                        toaster: "b-toaster-top-center",
+                        solid: true,
+                    });
                 }
-                this.$bvToast.toast("Comentário removida", {
-                    title: "Sucesso",
-                    autoHideDelay: 3000,
-                    variant: "success",
-                    toaster: "b-toaster-top-center",
-                    solid: true,
-                });
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
@@ -138,7 +170,10 @@ export default {
                     solid: true,
                 });
             }
-        }
+        },
+        loadComments() {
+            this.showComments += this.showComments;
+        },
     },
 };
 </script>
@@ -161,7 +196,7 @@ export default {
     padding: 1rem 0;
 }
 
-.img-post{
+.img-post {
     max-width: 550px;
 }
 
@@ -225,6 +260,14 @@ img {
 .buton-post:active {
     border: none;
     outline: none;
+}
+
+.load-comments {
+    border: none;
+    outline: none;
+    height: 3rem;
+    background: rgb(253, 32, 32);
+    border-radius: 0.3rem;
 }
 
 .card {
