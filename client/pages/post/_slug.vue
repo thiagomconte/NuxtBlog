@@ -1,5 +1,5 @@
 <template>
-    <div class="container container-post">
+    <div class="container container-post" v-if="loaded">
         <!-- Post area -->
         <h1 class="h1-post">{{ post.title }}</h1>
         <hr />
@@ -16,7 +16,7 @@
         <span class="span-post imgOwner"> Autor: {{ post.imgOwner }}</span>
         <p class="content" v-html="post.content"></p>
         <hr />
-        <div v-show="$store.state.isAuthenticated" class="separator">
+        <div v-if="$store.state.isAuthenticated" class="separator">
             <p>Deixe um comentário!</p>
             <b-form-textarea
                 id="textarea-rows-comment"
@@ -28,7 +28,7 @@
                 Comentar <i class="fa fa-comments" aria-hidden="true"></i>
             </button>
         </div>
-        <h4 class="info-comment" v-show="!$store.state.isAuthenticated">
+        <h4 class="info-comment" v-else>
             Para participar dos comentários, você precisa criar uma
             <NuxtLink to="/register">conta.</NuxtLink>
         </h4>
@@ -38,22 +38,22 @@
             v-for="(comment, index) in comments.slice(0, showComments)"
             :key="comment._id"
         >
-            <h4 v-show="comment.user_id.isAdmin" class="mb-3">
+            <h4 v-if="comment.user_id.isAdmin" class="mb-3">
                 <i class="fa fa-check-square" aria-hidden="true"></i>
                 {{ comment.user_id.name }}:
             </h4>
-            <h3 v-show="!comment.user_id.isAdmin" class="mb-3">{{ comment.user_id.name }}:</h3>
+            <h3 v-else class="mb-3">{{ comment.user_id.name }}:</h3>
             <p class="comment">{{ comment.content }}</p>
             <a
                 href="#"
                 @click.prevent="onDeleteComment(comment._id, index)"
-                v-show="$store.state.user.isAdmin"
+                v-if="$store.state.user.isAdmin"
                 ><i class="fa fa-trash" aria-hidden="true"></i>
             </a>
         </div>
         <button
             @click.prevent="loadComments"
-            v-show="showComments < numOfComments"
+            v-if="showComments < numOfComments"
             class="load-comments"
         >
             Carregar mais comentários
@@ -76,6 +76,13 @@ export default {
             console.log(err);
         }
     },
+    created() {
+        var self = this;
+
+        self.$nextTick(function () {
+            self.loaded = true;
+        });
+    },
     data() {
         return {
             content: "",
@@ -83,6 +90,7 @@ export default {
             numOfComments: 0,
             showComments: 5,
             confirm: "",
+            loaded: ""
         };
     },
     methods: {
