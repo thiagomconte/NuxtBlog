@@ -25,4 +25,4 @@ app.listen(PORT, function () {
     console.log(`Server running on port ${PORT}`);
 });
 
-module.exports = { path: '/', handler: app }
+module.exports = { path: '/api', handler: app }
