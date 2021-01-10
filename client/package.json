@@ -22,8 +22,10 @@
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.11",
+    "nodemailer": "^6.4.17",
     "nuxt": "^2.14.6",
     "nuxt-tailvue": "^1.0.50",
     "vuejs-paginate": "^2.1.0"
