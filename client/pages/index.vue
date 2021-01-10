@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <client-only>
         <div
             class="row mt-5 mb-5 container-index"
             v-for="(post, index) in posts"
@@ -53,7 +53,7 @@
             use-router
             v-if="totalPages >= 1"
         ></b-pagination-nav>
-    </div>
+    </client-only>
 </template>
 
 <script>

@@ -38,7 +38,7 @@
                     <input
                         type="password"
                         class="form-control item"
-                        id="password"
+                        id="checkpassword"
                         placeholder="Confirme a senha"
                         v-model="checkpassword"
                     />
