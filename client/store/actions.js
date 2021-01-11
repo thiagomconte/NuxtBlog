@@ -2,7 +2,7 @@ export async function nuxtServerInit({ commit, dispatch }, { req, res }) {
   if (this.$cookies.get("token")) {
     this.$axios.setToken(this.$cookies.get("token"));
     await this.$axios
-      .$get("/user/profile"z)
+      .$get("/user/profile")
       .then(response => {
         commit("setUser", response.user);
         commit("setAuthenticated", true);

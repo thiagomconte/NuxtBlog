@@ -9,6 +9,7 @@ const app = express();
 //! DATABASE CONNECTION
 require("./dataBase/mongodbConn");
 
+
 //! MIDDLEWARES
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,4 +21,4 @@ app.use("/post", require("./routes/post"));
 app.use("/comment", require("./routes/comment"));
 app.use("/admin", require("./routes/admin"));
 
-module.exports = { path: '/', handler: app }
+module.exports = { path: "/", handler: app };
