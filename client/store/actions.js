@@ -63,6 +63,7 @@ export function login({ commit }, { email, password }) {
               commit("setAdmin", true);
               commit("setAuthenticated", true);
               this.$router.push("/");
+              resolve()
             })
             .catch(err => {
               reject(err.response.data.message);
