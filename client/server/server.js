@@ -2,9 +2,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+var secure = require('ssl-express-www');
 require("dotenv").config();
 
 const app = express();
+app.use(secure);
 
 //! DATABASE CONNECTION
 require("./dataBase/mongodbConn");

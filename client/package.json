@@ -30,6 +30,7 @@
     "nuxt": "^2.14.6",
     "nuxt-tailvue": "^1.0.50",
     "portal-vue": "^2.1.7",
+    "ssl-express-www": "^3.0.7",
     "vuejs-paginate": "^2.1.0"
   },
   "devDependencies": {}
