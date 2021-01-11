@@ -13,7 +13,6 @@
                         <i class="fa fa-home"></i>
                         <span>Home</span>
                     </NuxtLink>
-                    <client-only>
                         <NuxtLink
                             v-show="!$store.state.isAuthenticated"
                             class="nav-link"
@@ -66,7 +65,6 @@
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             Sair
                         </a>
-                    </client-only>
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->
