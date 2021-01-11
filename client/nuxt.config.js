@@ -1,7 +1,3 @@
-import path from "path";
-import fs from "fs";
-import https from "https";
-
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
 
@@ -48,10 +44,6 @@ export default {
 
   server: {
     port: process.env.PORT || 3000,
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, "server.key")),
-      cert: fs.readFileSync(path.resolve(__dirname, "server.cert"))
-    }
   },
 
   serverMiddleware: ["~/server/server"]
