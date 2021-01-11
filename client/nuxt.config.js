@@ -1,6 +1,6 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
-
+  ssr: false,
   head: {
     title: "Paixão Tricolor",
     meta: [
@@ -40,7 +40,9 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
+  build: {
+    babel: { compact: true }
+  },
 
   server: {
     port: process.env.PORT || 3000,
