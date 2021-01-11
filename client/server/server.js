@@ -10,11 +10,7 @@ const app = express();
 require("./dataBase/mongodbConn");
 
 //! MIDDLEWARES
-app.use(cors({
-    origin: process.env.BASE_URL || 'http://localhost:3000',
-    credentials: true
-}));
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
