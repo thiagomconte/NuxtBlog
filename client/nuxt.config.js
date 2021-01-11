@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import https from "https";
 
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
@@ -39,7 +40,12 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000"
+    baseURL: process.env.BASE_URL || "http://localhost:3000",
+    options: {
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+      })
+    }
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
