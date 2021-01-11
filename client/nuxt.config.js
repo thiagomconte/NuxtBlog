@@ -41,11 +41,6 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: process.env.BASE_URL || "http://localhost:3000",
-    options: {
-      httpsAgent: new https.Agent({
-        rejectUnauthorized: false
-      })
-    }
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
