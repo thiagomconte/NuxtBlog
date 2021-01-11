@@ -61,7 +61,7 @@ import moment from "moment";
 export default {
     async asyncData({ $axios }) {
         try {
-            let response = await $axios.$get(`/post/1`);
+            let response = await $axios.$get(`/post/1`, { withCredentials: true });
             return {
                 posts: response.posts,
                 tam: response.tam,

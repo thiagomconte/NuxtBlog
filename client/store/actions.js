@@ -2,7 +2,7 @@ export async function nuxtServerInit({ commit, dispatch }, { req, res }) {
   if (this.$cookies.get("token")) {
     this.$axios.setToken(this.$cookies.get("token"));
     await this.$axios
-      .$get("/user/profile")
+      .$get("/user/profile", { withCredentials: true })
       .then(response => {
         commit("setUser", response.user);
         commit("setAuthenticated", true);
@@ -47,7 +47,7 @@ export function login({ commit }, { email, password }) {
       .$post("/user/login", {
         email: email,
         password: password
-      })
+      }, { withCredentials: true })
       .then(response => {
         if (response.success) {
           this.$axios.setToken(response.token);
