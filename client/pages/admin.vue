@@ -2,7 +2,8 @@
     <div>
         <b-table-simple hover small caption-top responsive>
             <caption>
-                Total de usuários: <b>{{users.length}}</b>
+                Total de usuários:
+                <b>{{ users.length }}</b>
             </caption>
             <b-thead head-variant="dark">
                 <b-tr>
@@ -76,6 +77,7 @@ export default {
                     isAdmin: false,
                 },
             ],
+            confirm: "",
         };
     },
     methods: {
@@ -102,15 +104,38 @@ export default {
         },
         async onDeleteUser(id, index) {
             try {
-                let response = await this.$axios.$delete(`/admin/delete/${id}`);
-                this.users.splice(index, 1);
-                this.$bvToast.toast(response.message, {
-                    title: "Sucesso",
-                    autoHideDelay: 3000,
-                    variant: "success",
-                    toaster: "b-toaster-top-center",
-                    solid: true,
-                });
+                await this.$bvModal
+                    .msgBoxConfirm("Tem certeza?", {
+                        okTitle: "Sim",
+                        cancelTitle: "Cancelar",
+                        okVariant: "danger",
+                    })
+                    .then((value) => {
+                        this.confirm = value;
+                    })
+                    .catch((err) => {
+                        this.$bvToast.toast("Tente novamente", {
+                            title: "Erro",
+                            autoHideDelay: 3000,
+                            variant: "danger",
+                            toaster: "b-toaster-top-center",
+                            solid: true,
+                        });
+                    });
+
+                if (this.confirm) {
+                    let response = await this.$axios.$delete(
+                        `/admin/delete/${id}`
+                    );
+                    this.users.splice(index, 1);
+                    this.$bvToast.toast(response.message, {
+                        title: "Sucesso",
+                        autoHideDelay: 3000,
+                        variant: "success",
+                        toaster: "b-toaster-top-center",
+                        solid: true,
+                    });
+                }
             } catch (err) {
                 this.$bvToast.toast(err.response.data.message, {
                     title: "Erro",
@@ -126,11 +151,11 @@ export default {
 </script>
 
 <style>
-.actions{
+.actions {
     color: rgb(250, 104, 104);
 }
 
-.actions:hover{
+.actions:hover {
     color: rgb(255, 0, 0);
     text-decoration: none;
 }
