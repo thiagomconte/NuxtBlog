@@ -1,5 +1,6 @@
 <template>
     <div class="teste">
+    <no-ssr>
         <b-navbar toggleable="lg" type="dark" variant="dark">
             <b-navbar-brand href="#">
                 <NuxtLink class="navbar-brand" to="/">Paixão Tricolor</NuxtLink>
@@ -92,6 +93,7 @@
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
+        </no-ssr>
     </div>
 </template>
 
